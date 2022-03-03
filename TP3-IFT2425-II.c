@@ -293,7 +293,7 @@ int main(int argc,char** argv)
     for (int i = 10001; i <= 20000; i++)
     {
       x = mu*x*(1-x);
-      i = (int) (mu-2.5) * 4096 / 2.5;
+      i = (int) (mu-2.5) * 4096 / 1.5;
       j = (int) x * 4096;
       Graph2D[i][j]=0.0;
     } 
