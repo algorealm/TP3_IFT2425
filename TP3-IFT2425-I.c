@@ -22,12 +22,11 @@ float trapezApprox(float nbIntervals)
     float width = 1 / nbIntervals;
     float x_a = 0.0;
     float x_b = 0.0 + width;
-    float piApprox = 0.0;
-    for (int i=0; i <= nbIntervals-1; i++)
+    float piApprox = piIntFunct(0) + piIntFunct(nbIntervals-1);
+    for (int i=1; i <= nbIntervals-1; i++)
     {
-        piApprox = piApprox + width * (piIntFunct(x_a) + piIntFunct(x_b)) / 2;
-        x_a = x_b;
-        x_b = x_b + width;
+        piApprox = piApprox + width * piIntFunct(x);
+        
     }
     return piApprox;
 }
