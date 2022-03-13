@@ -48,9 +48,41 @@ float[] genVector(float nbIntervals)
     return vector;
 }
 
+float[] pairSum(float[] vector, int start, int end)
+{
+    if (start == end)
+    {
+        return vector[start];
+    }
+    else if (abs(start - end) == 1)
+    {
+        return vector[start] + vector[end];
+    }
+    else:
+    {
+        int middle = (int)(abs(start-end)/2);
+        return pairSum(vector, start, middle) + pairSum(vector, middle+1, end);
+    }
+}
 
 
 //2-b
+float[] sumKahan(float nbIntervals)
+{
+     float width = 1 / nbIntervals;
+    float vector[nbIntervals];
+    vector[0] = piIntFunct(0);
+    vector[nbIntervals-1] = piIntFunct(1);
+
+    float x_i = 0.0 + width;
+
+    for (int i=1; i <= nbIntervals - 1; i++)
+    {
+        vector[i] = piIntFunct(x);
+        x = x + width;
+    }
+    return vector;
+}
 
 int main()
 {
