@@ -20,13 +20,12 @@ float piIntFunct(float x)
 float trapezApprox(float nbIntervals)
 {
     float width = 1 / nbIntervals;
-    float x_a = 0.0;
-    float x_b = 0.0 + width;
-    float piApprox = piIntFunct(0) + piIntFunct(nbIntervals-1);
+    float x = 0.0 + width;
+    float piApprox = piIntFunct(0) + piIntFunct(nbIntervals * width);
     for (int i=1; i <= nbIntervals-1; i++)
     {
         piApprox = piApprox + width * piIntFunct(x);
-        
+        x = x + width;
     }
     return piApprox;
 }
@@ -35,9 +34,9 @@ float trapezApprox(float nbIntervals)
 float[] genVector(float nbIntervals)
 {
     float width = 1 / nbIntervals;
-    float vector[nbIntervals + 1];
+    float vector[nbIntervals];
     vector[0] = piIntFunct(0);
-    vector[nbIntervals] = piIntFunct(1);
+    vector[nbIntervals-1] = piIntFunct(1);
 
     float x_i = 0.0 + width;
 
