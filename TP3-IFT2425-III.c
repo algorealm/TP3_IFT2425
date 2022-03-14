@@ -25,6 +25,7 @@ double sumD(int u, int N, double x)
 
 int main()
 {
+  int u = 4; int N = 10000000;
   //float results
   printf("[0.20:>");printf("%12,10f", sumF(u, N, 0.2);printf("]");
   printf("[0.40:>");printf("%12,10f", sumF(u, N, 0.4);printf("]");
