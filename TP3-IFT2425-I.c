@@ -36,7 +36,7 @@ float[] genVector(float nbIntervals)
     float width = 1 / nbIntervals;
     float vector[nbIntervals];
     vector[0] = piIntFunct(0);
-    vector[nbIntervals-1] = piIntFunct(1);
+    vector[nbIntervals] = piIntFunct(1);
 
     float x_i = 0.0 + width;
 
@@ -48,21 +48,27 @@ float[] genVector(float nbIntervals)
     return vector;
 }
 
-float[] pairSum(float[] vector, int start, int end)
+float pairSum(float[] vector, int first, int last)
 {
-    if (start == end)
+    if (first == last)
     {
         return vector[start];
     }
     else if (abs(start - end) == 1)
     {
-        return vector[start] + vector[end];
+        return vector[first] + vector[last];
     }
-    else:
+    else
     {
         int middle = (int)(abs(start-end)/2);
-        return pairSum(vector, start, middle) + pairSum(vector, middle+1, end);
+        return pairSum(vector, first, last) + pairSum(vector, middle+1, last);
     }
+}
+
+float funct2a(int nbIterations)
+{
+    float[] vector = genVector(nbIterations);
+    return pairSum(vector, 0, nbIterations);
 }
 
 
