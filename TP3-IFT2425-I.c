@@ -65,7 +65,7 @@ float pairSum(float[] vector, int first, int last)
     }
 }
 
-float funct2a(int nbIterations)
+float PairwiseSum(int nbIterations)
 {
     float[] vector = genVector(nbIterations);
     return pairSum(vector, 0, nbIterations);
@@ -73,32 +73,65 @@ float funct2a(int nbIterations)
 
 
 //2-b
-float[] sumKahan(float nbIntervals)
+float sumKahan(float[] vector)
 {
-     float width = 1 / nbIntervals;
-    float vector[nbIntervals];
-    vector[0] = piIntFunct(0);
-    vector[nbIntervals-1] = piIntFunct(1);
+     float x,y,e,temp,sum = 0;
 
     float x_i = 0.0 + width;
 
-    for (int i=1; i <= nbIntervals - 1; i++)
+    for (int i=0; i <= nbIntervals; i++)
     {
-        vector[i] = piIntFunct(x);
-        x = x + width;
+        x = vector[i]
+        y = x + e
+        temp = sum
+        sum = temp + y
+        e = (temp - sum) + y;
     }
-    return vector;
+    return sum;
 }
+
+float KahanSummat()
+{
+    float[] vector = genVector[5000000];
+    return sumKahan(vector);
+}
+
+
 
 int main()
 {
-    //print approximate of pi
-    printf("Pi ~= ");
-    printf("%22.20f", trapezApprox(5000000));
+    float realPi = 3.14159265358979323846264338;
+    float pi;
+    //add log error !?
+    //1-a
+    printf("[1>Given_Order:]  Pi=");
+    pi = trapezApprox(5000000);
+    printf("%22.20f", pi);
     //print error of approx. of pi
-    float error = fabs(3.14159265358979323846264338 - trapezApprox(5000000));
-    printf(" Approx error is = ");
+    float error = realPi - pi;
+    printf("  Er=");
     printf("%12.10f", error);
+    printf("/n");
+    
+    //2-a
+    printf("[2>PairwiseSum]  Pi=");
+    pi = PairwiseSum(5000000);
+    printf("%22.20f", pi);
+    //print error of approx. of pi
+    float error = realPi - pi;
+    printf("  Er=");
+    printf("%12.10f", error);
+    printf("/n");
+    
+    //2-b
+    printf("[3>KahanSummat]  Pi=");
+    pi = KahanSummat(5000000);
+    printf("%22.20f", pi);
+    //print error of approx. of pi
+    float error = realPi - pi;
+    printf("  Er=");
+    printf("%12.10f", error);
+    printf("/n");
 
     return 0;
 }
