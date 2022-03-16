@@ -23,14 +23,14 @@ float trapezApprox(int nbIntervals)
     //width is h (width of intervals on the x axis)
     float width = (float)1.0 / nbIntervals;
 
-    //add half of the first and last element of sum
-    float piApprox = width * (piIntFunct(0.0) + piIntFunct(1.0)) / 2.0;
-    //add the sums in between
-    float x = 0.0 + width;
-    for (int i=1; i <= nbIntervals-1; i++)
+    float piApprox = width / 2 * (piIntFunct(0.0) + piIntFunct(1.0));
+	float x1, x2 = 0.0;
+
+	for (int i=1; i <= nbIntervals-1; i++)
     {
-        piApprox = piApprox + (width * piIntFunct(x));
-        x = x + width;
+		x1 = i/(float)nbIntervals;
+		x2 = (i+1)/(float)nbIntervals;
+		piApprox += width / 2 * (piIntFunct(x1) + piIntFunct(x2));
     }
     return piApprox;
 }
@@ -53,13 +53,18 @@ float* genVector(float* vector, int nbIntervals)
     vector[0] = width * piIntFunct(0.0)/2.0;
     vector[nbIntervals] = width * piIntFunct(1.0)/2.0;
 
-    float x = 0.0 + width;
+	float x = 0.0;
 
-    for (int i=1; i <= nbIntervals - 1; i++)
+	for (int i=1; i <= nbIntervals-1; i++)
     {
-        vector[i] = width * piIntFunct(x);
-        x = x + width;
+		x = i/(float)nbIntervals;
+		vector[i] = width * piIntFunct(x);
     }
+//    for (int i=1; i <= nbIntervals - 1; i++)
+//    {
+//        vector[i] = width * piIntFunct(x);
+//        x = x + width;
+//    }
     return vector;
 }
 
@@ -149,7 +154,8 @@ int main()
     //print error of approx. of pi
     error = abs(realPi - pi);
     printf("  Er=");
-    printf("%12.10f", error);
+    printf("%12.10f\n", error);
+	
 
 
     return 0;
