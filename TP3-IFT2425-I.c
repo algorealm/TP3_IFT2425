@@ -1,137 +1,159 @@
 //------------------------------------------------------
 // module  : Tp-IFT2425-I.c
-// author  : Dereck Piche
+// author  : Dereck Piche et Louis Thibault
 // date    : 
 // version : 1.0
 // language: C++
 // note    :
 //------------------------------------------------------
-//  
+
 
 #include <math.h>
 #include <stdio.h>
 
 //1
+//returns output of integrated function 
 float piIntFunct(float x)
 {
-    return 4*sqrt(1-x*x);
+    return (float)4*sqrt(1-x*x);
 }
 
-float trapezApprox(float nbIntervals)
+float trapezApprox(int nbIntervals)
 {
-    float width = 1 / nbIntervals;
+    //width is h (width of intervals on the x axis)
+    float width = (float)1.0 / nbIntervals;
+
+    //add half of the first and last element of sum
+    float piApprox = width * (piIntFunct(0.0) + piIntFunct(1.0)) / 2.0;
+    //add the sums in between
     float x = 0.0 + width;
-    float piApprox = piIntFunct(0) + piIntFunct(nbIntervals * width);
     for (int i=1; i <= nbIntervals-1; i++)
     {
-        piApprox = piApprox + width * piIntFunct(x);
+        piApprox = piApprox + (width * piIntFunct(x));
         x = x + width;
     }
     return piApprox;
 }
 
-//2-a
-float[] genVector(float nbIntervals)
-{
-    float width = 1 / nbIntervals;
-    float vector[nbIntervals];
-    vector[0] = piIntFunct(0);
-    vector[nbIntervals] = piIntFunct(1);
+//2
 
-    float x_i = 0.0 + width;
+float* f_matrix_allocate_1d(int hsize)
+{
+    float* matrix;
+    matrix = new float[hsize]; return matrix;
+}
+
+//generate a vector containing function evalutaions 
+//at respective intervals
+float* genVector(float* vector, int nbIntervals)
+{   
+    float width = (float) 1.0 / nbIntervals;
+
+    //set halves of the first and last element of sum in vector
+    vector[0] = width * piIntFunct(0.0)/2.0;
+    vector[nbIntervals] = width * piIntFunct(1.0)/2.0;
+
+    float x = 0.0 + width;
 
     for (int i=1; i <= nbIntervals - 1; i++)
     {
-        vector[i] = piIntFunct(x);
+        vector[i] = width * piIntFunct(x);
         x = x + width;
     }
     return vector;
 }
 
-float pairSum(float[] vector, int first, int last)
+//2-a
+
+//recursive function takes vector as input and return 
+//pairwise sum of it's elements
+float pairSum(float* p, int first, int last)
 {
     if (first == last)
     {
-        return vector[start];
+        float term = p[first];
+        return term;
     }
-    else if (abs(start - end) == 1)
+    else if (abs(last - first) == 1)
     {
-        return vector[first] + vector[last];
+        float leftTerm = p[first];
+        float rightTerm = p[last];
+        return leftTerm + rightTerm;
     }
     else
     {
-        int middle = (int)(abs(start-end)/2);
-        return pairSum(vector, first, last) + pairSum(vector, middle+1, last);
+        int middle = abs(last-first)/2 + first;
+        return pairSum(p, first, middle) + pairSum(p, middle + 1, last);
     }
-}
-
-float PairwiseSum(int nbIterations)
-{
-    float[] vector = genVector(nbIterations);
-    return pairSum(vector, 0, nbIterations);
 }
 
 
 //2-b
-float sumKahan(float[] vector)
-{
-     float x,y,e,temp,sum = 0;
 
-    float x_i = 0.0 + width;
+//function takes vector as input and returns
+//Kahan sum of it's elements
+float sumKahan(float* vector, int nbIntervals)
+{
+    float x,y,e,temp,sum; x = 0.0, y=x, e=x, temp=x, sum=x;
+
 
     for (int i=0; i <= nbIntervals; i++)
     {
-        x = vector[i]
-        y = x + e
-        temp = sum
-        sum = temp + y
+        x = vector[i];
+        y = x + e;
+        temp = sum;
+        sum = temp + y;
         e = (temp - sum) + y;
     }
     return sum;
-}
-
-float KahanSummat()
-{
-    float[] vector = genVector[5000000];
-    return sumKahan(vector);
 }
 
 
 
 int main()
 {
+
+    int nbIntervals = 5000000;
     float realPi = 3.14159265358979323846264338;
-    float pi;
-    //add log error !?
-    //1-a
+    float pi, error;
+
+    //allocate memory for vector
+    float* vector;
+    vector = f_matrix_allocate_1d(nbIntervals+1);
+    
+    //generate vector with terms for sums
+    genVector(vector, nbIntervals);
+
+
+    //1
     printf("[1>Given_Order:]  Pi=");
-    pi = trapezApprox(5000000);
+    pi = trapezApprox(nbIntervals);
     printf("%22.20f", pi);
     //print error of approx. of pi
-    float error = realPi - pi;
+    error = abs(realPi - pi);
     printf("  Er=");
     printf("%12.10f", error);
-    printf("/n");
+    printf("\n");
     
     //2-a
     printf("[2>PairwiseSum]  Pi=");
-    pi = PairwiseSum(5000000);
+    pi = pairSum(vector, 0, 5000000);
     printf("%22.20f", pi);
     //print error of approx. of pi
-    float error = realPi - pi;
+    error = abs(realPi - pi);
     printf("  Er=");
     printf("%12.10f", error);
-    printf("/n");
+    printf("\n");
     
     //2-b
     printf("[3>KahanSummat]  Pi=");
-    pi = KahanSummat(5000000);
+    pi = sumKahan(vector, nbIntervals);
     printf("%22.20f", pi);
     //print error of approx. of pi
-    float error = realPi - pi;
+    error = abs(realPi - pi);
     printf("  Er=");
     printf("%12.10f", error);
-    printf("/n");
+
 
     return 0;
 }
