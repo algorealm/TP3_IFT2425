@@ -71,14 +71,11 @@ float pairSum(float* p, int first, int last)
 {
     if (first == last)
     {
-        float term = p[first];
-        return term;
+        return p[first];
     }
     else if (abs(last - first) == 1)
     {
-        float leftTerm = p[first];
-        float rightTerm = p[last];
-        return leftTerm + rightTerm;
+        return p[first] + p[last];
     }
     else
     {
