@@ -19,7 +19,7 @@ float sumF(float u, int N, float x)
   for (int i = 1; i <= N; i++)
   {
     x = u*x*(1.0-x);
-    sum = sum + sqrt((double)x);
+    sum = sum + sqrtf(x);
   }
   return (float)2/(sum/N);
 }
